@@ -1,8 +1,8 @@
-#include"info.h"
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<locale.h>
+#include "info.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <locale.h>
 #define SUCCESS 1;
 #define FAIL -1;
 
@@ -26,7 +26,7 @@ list_people_t* CreateList(void)
 }
 
 
-list_people_t* Ñlear(list_people_t* node)
+list_people_t* Clear(list_people_t* node)
 {
 	list_people_t* tmp = NULL;
 
@@ -44,17 +44,18 @@ list_people_t* Ñlear(list_people_t* node)
 
 void PrintList(list_people_t* p)
 {
-	if (p == NULL)
+	list_people_t* tmp = p->next;
+	if (tmp == NULL)
 	{
 		printf("List is empty\n");
 	}
 	else
 	{
-		while (p != NULL)
+		while (tmp != NULL)
 		{
-			printf("%s %s %s", p->name, p->surname, p->lastname);
-			p = p->next;
-			if (p == NULL)
+			printf("%s %s %s", tmp->name, tmp->surname, tmp->lastname);
+			tmp = tmp->next;
+			if (tmp == NULL)
 			{
 				printf(".\n");
 			}
@@ -82,15 +83,37 @@ list_people_t* CreateNode(list_people_t* s, char* str)
 		return NULL;
 	}
 	char* word = strtok(str, " ,.");
-	s->name = (char*)malloc(strlen(word));
+	s->name = (char*)malloc(strlen(word) + 1);
+	if (s->name == NULL)
+	{
+		printf("error");
+		free(s);
+		return NULL;
+	}
 	strcpy(s->name, word);
 
 	word = strtok(NULL, " ,.");
-	s->surname = (char*)malloc(strlen(word));
+	s->surname = (char*)malloc(strlen(word) + 1);
+	if (s->surname == NULL)
+	{
+		printf("error");
+		free(s->name);
+		free(s);
+		return NULL;
+	}
 	strcpy(s->surname, word);
 
 	word = strtok(NULL, " ,.");
-	s->lastname = (char*)malloc(strlen(word));
+	s->lastname = (char*)malloc(strlen(word) + 1);
+	if (s->lastname == NULL)
+	{
+		printf("error");
+		free(s->surname);
+		free(s->name);
+		free(s);
+		return NULL;
+	}
+
 	strcpy(s->lastname, word);
 
 	s->next = p;
@@ -145,18 +168,17 @@ int AddToList(list_people_t* s, list_people_t* newNode)
 list_people_t* FileToList(list_people_t* s, char* filename)
 {
 	FILE* fp;
+	s = CreateList();
+	if (s == NULL)
+	{
+		printf("error");
+		return -1;
+	}
 	char buf[BUF_SIZE];
 	if ((fp = fopen(filename, "r")) == NULL)
 	{
 		printf("Cannot open file.\n");
-		s = Ñlear(s);
-
-		if (s != NULL)
-		{
-			printf("error");
-			return NULL;
-		}
-
+		s = Clear(s);
 		return NULL;
 	}
 
@@ -172,7 +194,7 @@ list_people_t* FileToList(list_people_t* s, char* filename)
 			{
 				printf("error");
 				fclose(fp);
-				Ñlear(s);
+				Clear(s);
 				return NULL;
 			}
 			int res = AddToList(newplace, newnode);
@@ -181,7 +203,7 @@ list_people_t* FileToList(list_people_t* s, char* filename)
 				printf("error");
 				free(newnode);
 				fclose(fp);
-				Ñlear(s);
+				Clear(s);
 
 				return NULL;
 			}
@@ -231,6 +253,7 @@ list_people_t* FindPeople(list_people_t* s, char* str)
 					if (tmp == NULL)
 					{
 						printf("error");
+						Clear(founded);
 						return NULL;
 					}
 
@@ -250,22 +273,17 @@ list_people_t* FindPeople(list_people_t* s, char* str)
 	return founded;
 }
 
-
+/*
 int main()
 {
 	FILE* fp;
 	char buf[BUF_SIZE];
-	list_people_t* s = CreateList();
-	if (s == NULL)
-	{
-		printf("error");
-		return -1;
-	}
+	list_people_t* s = NULL;
 
 	if ((fp = fopen("People.txt", "w")) == NULL)
 	{
 		printf("Cannot open file.\n");
-		s = Ñlear(s);
+		s = Clear(s);
 		return -1;
 	}
 
@@ -285,22 +303,13 @@ int main()
 	list_people_t* p = FindPeople(s, buf);
 
 	printf("People search: ");
-	PrintList(p->next);
-	p = Ñlear(p);
-	if (p != NULL)
-	{
-		printf("error");
-		return -1;
-	}
+	PrintList(p);
+	p = Clear(p);
 
 	printf("All people: ");
-	PrintList(s->next);
-	s = Ñlear(s);
-	if (s != NULL)
-	{
-		printf("error");
-		return -1;
-	}
+	PrintList(s);
+	s = Clear(s);
 	
 	return 0;
 }
+*/

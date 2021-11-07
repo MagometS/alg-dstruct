@@ -3,9 +3,9 @@ extern "C" {
 #endif
 
 #define _CRT_SECURE_NO_WARNINGS
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #define BUF_SIZE 128
 
 
@@ -20,7 +20,7 @@ extern "C" {
 	void PrintList(list_people_t* p);
 	int AddToList(list_people_t* s, list_people_t* newnode);
 	list_people_t* CreateList(void);
-	list_people_t* Ñlear(list_people_t* node);
+	list_people_t* Clear(list_people_t* node);
 	list_people_t* CreateNode(list_people_t* s, char* str);
 	list_people_t* SearchPlace(list_people_t* s, char* str);
 	list_people_t* FindPeople(list_people_t* s, char* str);
