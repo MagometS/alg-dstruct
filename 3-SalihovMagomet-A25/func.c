@@ -29,12 +29,13 @@ list_people_t* CreateList(void)
 list_people_t* Clear(list_people_t* node)
 {
 	list_people_t* tmp = NULL;
-
 	while (node != NULL)
 	{
 		tmp = node;
 		node = node->next;
-
+		free(tmp->name);
+		free(tmp->surname);
+		free(tmp->lastname);
 		free(tmp);
 	}
 
@@ -256,10 +257,39 @@ list_people_t* FindPeople(list_people_t* s, char* str)
 						Clear(founded);
 						return NULL;
 					}
+					tmp->name = (char*)malloc(strlen(p1->name) + 1);
+					if (tmp->name == NULL)
+					{
+						printf("error");
+						free(tmp);
+						Clear(founded);
+						return NULL;
+					}
+					strcpy(tmp->name, p1->name);
 
-					tmp->name = p1->name;
-					tmp->surname = p1->surname;
-					tmp->lastname = p1->lastname;
+					tmp->surname = (char*)malloc(strlen(p1->surname) + 1);
+					if (tmp->surname == NULL)
+					{
+						printf("error");
+						free(tmp);
+						free(tmp->name);
+						Clear(founded);
+						return NULL;
+					}
+					strcpy(tmp->surname, p1->surname);
+
+					tmp->lastname = (char*)malloc(strlen(p1->lastname) + 1);
+					if (tmp->lastname == NULL)
+					{
+						printf("error");
+						free(tmp);
+						free(tmp->name);
+						free(tmp->surname);
+						Clear(founded);
+						return NULL;
+					}
+					strcpy(tmp->lastname, p1->lastname);
+
 					tmp->next = founded->next;
 					founded->next = tmp;
 				}
@@ -273,7 +303,7 @@ list_people_t* FindPeople(list_people_t* s, char* str)
 	return founded;
 }
 
-/*
+
 int main()
 {
 	FILE* fp;
@@ -301,6 +331,11 @@ int main()
 
 	fgets(buf, sizeof(buf), stdin);
 	list_people_t* p = FindPeople(s, buf);
+	if (p == NULL)
+	{
+		Clear(s);
+		return -1;
+	}
 
 	printf("People search: ");
 	PrintList(p);
@@ -312,4 +347,3 @@ int main()
 	
 	return 0;
 }
-*/

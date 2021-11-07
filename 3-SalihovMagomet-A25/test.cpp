@@ -34,6 +34,9 @@ TEST(Creation, CreateNode_TEST)
 	tmp = CreateNode(tmp, str);
 	ASSERT_NE(tmp, nullptr);
 	EXPECT_EQ(tmp->next, nullptr);
+	free(tmp->name);
+	free(tmp->surname);
+	free(tmp->lastname);
 	free(tmp);
 }
 
@@ -51,6 +54,9 @@ TEST(WriteInfo, CreateNode_TEST)
 	EXPECT_STREQ(tmp->surname, "B");
 	EXPECT_STREQ(tmp->lastname, "C");
 
+	free(tmp->name);
+	free(tmp->surname);
+	free(tmp->lastname);
 	free(tmp);
 }
 
@@ -349,14 +355,18 @@ TEST(SearchByNameSurnameLastname, FindPeople_TEST)
 	list_people_t* founded = FindPeople(s, str);
 	ASSERT_NE(founded, nullptr);
 	EXPECT_EQ(founded->next->next, nullptr);
-	EXPECT_EQ(founded->next->name, name1);
-	EXPECT_EQ(founded->next->surname, surname1);
-	EXPECT_EQ(founded->next->lastname, lastname1);
+	EXPECT_STREQ(founded->next->name, name1);
+	EXPECT_STREQ(founded->next->surname, surname1);
+	EXPECT_STREQ(founded->next->lastname, lastname1);
 
 	free(node3);
 	free(node2);
 	free(node1);
 	free(s);
+	free(founded->next->name);
+	free(founded->next->surname);
+	free(founded->next->lastname);
+	free(founded->next);
 	free(founded);
 }
 
@@ -409,19 +419,24 @@ TEST(SearchOnlyByName, FindPeople_TEST)
 	list_people_t* founded = FindPeople(s, str);
 	ASSERT_NE(founded, nullptr);
 	EXPECT_EQ(founded->next->next->next, nullptr);
-	EXPECT_EQ(founded->next->name, name2);
-	EXPECT_EQ(founded->next->surname, surname2);
-	EXPECT_EQ(founded->next->lastname, lastname2);
-	EXPECT_EQ(founded->next->next->name, name1);
-	EXPECT_EQ(founded->next->next->surname, surname1);
-	EXPECT_EQ(founded->next->next->lastname, lastname1);
-
+	EXPECT_STREQ(founded->next->name, name2);
+	EXPECT_STREQ(founded->next->surname, surname2);
+	EXPECT_STREQ(founded->next->lastname, lastname2);
+	EXPECT_STREQ(founded->next->next->name, name1);
+	EXPECT_STREQ(founded->next->next->surname, surname1);
+	EXPECT_STREQ(founded->next->next->lastname, lastname1);
 
 	free(node3);
 	free(node2);
 	free(node1);
 	free(s);
+	free(founded->next->next->name);
+	free(founded->next->next->surname);
+	free(founded->next->next->lastname);
 	free(founded->next->next);
+	free(founded->next->name);
+	free(founded->next->surname);
+	free(founded->next->lastname);
 	free(founded->next);
 	free(founded);
 }
@@ -475,19 +490,25 @@ TEST(SearchOnlyBySurname, FindPeople_TEST)
 	list_people_t* founded = FindPeople(s, str);
 	ASSERT_NE(founded, nullptr);
 	EXPECT_EQ(founded->next->next->next, nullptr);
-	EXPECT_EQ(founded->next->name, name2);
-	EXPECT_EQ(founded->next->surname, surname2);
-	EXPECT_EQ(founded->next->lastname, lastname2);
-	EXPECT_EQ(founded->next->next->name, name1);
-	EXPECT_EQ(founded->next->next->surname, surname1);
-	EXPECT_EQ(founded->next->next->lastname, lastname1);
+	EXPECT_STREQ(founded->next->name, name2);
+	EXPECT_STREQ(founded->next->surname, surname2);
+	EXPECT_STREQ(founded->next->lastname, lastname2);
+	EXPECT_STREQ(founded->next->next->name, name1);
+	EXPECT_STREQ(founded->next->next->surname, surname1);
+	EXPECT_STREQ(founded->next->next->lastname, lastname1);
 
 
 	free(node3);
 	free(node2);
 	free(node1);
 	free(s);
+	free(founded->next->next->name);
+	free(founded->next->next->surname);
+	free(founded->next->next->lastname);
 	free(founded->next->next);
+	free(founded->next->name);
+	free(founded->next->surname);
+	free(founded->next->lastname);
 	free(founded->next);
 	free(founded);
 }
@@ -541,19 +562,25 @@ TEST(SearchOnlyByLastname, FindPeople_TEST)
 	list_people_t* founded = FindPeople(s, str);
 	ASSERT_NE(founded, nullptr);
 	EXPECT_EQ(founded->next->next->next, nullptr);
-	EXPECT_EQ(founded->next->name, name2);
-	EXPECT_EQ(founded->next->surname, surname2);
-	EXPECT_EQ(founded->next->lastname, lastname2);
-	EXPECT_EQ(founded->next->next->name, name1);
-	EXPECT_EQ(founded->next->next->surname, surname1);
-	EXPECT_EQ(founded->next->next->lastname, lastname1);
+	EXPECT_STREQ(founded->next->name, name2);
+	EXPECT_STREQ(founded->next->surname, surname2);
+	EXPECT_STREQ(founded->next->lastname, lastname2);
+	EXPECT_STREQ(founded->next->next->name, name1);
+	EXPECT_STREQ(founded->next->next->surname, surname1);
+	EXPECT_STREQ(founded->next->next->lastname, lastname1);
 
 
 	free(node3);
 	free(node2);
 	free(node1);
 	free(s);
+	free(founded->next->next->name);
+	free(founded->next->next->surname);
+	free(founded->next->next->lastname);
 	free(founded->next->next);
+	free(founded->next->name);
+	free(founded->next->surname);
+	free(founded->next->lastname);
 	free(founded->next);
 	free(founded);
 }
@@ -607,19 +634,25 @@ TEST(SearchByCombination, FindPeople_TEST)
 	list_people_t* founded = FindPeople(s, str);
 	ASSERT_NE(founded, nullptr);
 	EXPECT_EQ(founded->next->next->next, nullptr);
-	EXPECT_EQ(founded->next->name, name2);
-	EXPECT_EQ(founded->next->surname, surname2);
-	EXPECT_EQ(founded->next->lastname, lastname2);
-	EXPECT_EQ(founded->next->next->name, name1);
-	EXPECT_EQ(founded->next->next->surname, surname1);
-	EXPECT_EQ(founded->next->next->lastname, lastname1);
+	EXPECT_STREQ(founded->next->name, name2);
+	EXPECT_STREQ(founded->next->surname, surname2);
+	EXPECT_STREQ(founded->next->lastname, lastname2);
+	EXPECT_STREQ(founded->next->next->name, name1);
+	EXPECT_STREQ(founded->next->next->surname, surname1);
+	EXPECT_STREQ(founded->next->next->lastname, lastname1);
 
 
 	free(node3);
 	free(node2);
 	free(node1);
 	free(s);
+	free(founded->next->next->name);
+	free(founded->next->next->surname);
+	free(founded->next->next->lastname);
 	free(founded->next->next);
+	free(founded->next->name);
+	free(founded->next->surname);
+	free(founded->next->lastname);
 	free(founded->next);
 	free(founded);
 }
@@ -673,23 +706,32 @@ TEST(SearchByEmptyStr, FindPeople_TEST)
 	list_people_t* founded = FindPeople(s, str);
 	ASSERT_NE(founded, nullptr);
 	EXPECT_EQ(founded->next->next->next->next, nullptr);
-	EXPECT_EQ(founded->next->name, name3);
-	EXPECT_EQ(founded->next->surname, surname3);
-	EXPECT_EQ(founded->next->lastname, lastname3);
-	EXPECT_EQ(founded->next->next->name, name2);
-	EXPECT_EQ(founded->next->next->surname, surname2);
-	EXPECT_EQ(founded->next->next->lastname, lastname2);
-	EXPECT_EQ(founded->next->next->next->name, name1);
-	EXPECT_EQ(founded->next->next->next->surname, surname1);
-	EXPECT_EQ(founded->next->next->next->lastname, lastname1);
+	EXPECT_STREQ(founded->next->name, name3);
+	EXPECT_STREQ(founded->next->surname, surname3);
+	EXPECT_STREQ(founded->next->lastname, lastname3);
+	EXPECT_STREQ(founded->next->next->name, name2);
+	EXPECT_STREQ(founded->next->next->surname, surname2);
+	EXPECT_STREQ(founded->next->next->lastname, lastname2);
+	EXPECT_STREQ(founded->next->next->next->name, name1);
+	EXPECT_STREQ(founded->next->next->next->surname, surname1);
+	EXPECT_STREQ(founded->next->next->next->lastname, lastname1);
 
 
 	free(node3);
 	free(node2);
 	free(node1);
 	free(s);
-	//free(str);
+	free(founded->next->next->next->name);
+	free(founded->next->next->next->surname);
+	free(founded->next->next->next->lastname);
+	free(founded->next->next->next);
+	free(founded->next->next->name);
+	free(founded->next->next->surname);
+	free(founded->next->next->lastname);
 	free(founded->next->next);
+	free(founded->next->name);
+	free(founded->next->surname);
+	free(founded->next->lastname);
 	free(founded->next);
 	free(founded);
 }
@@ -750,7 +792,21 @@ TEST(ReadFromFile, FileToList_TEST)
 	EXPECT_STREQ(s->next->next->next->surname, "Abc");
 	EXPECT_STREQ(s->next->next->next->lastname, "Abc");
 	EXPECT_EQ(s->next->next->next->next, nullptr);
-	s = Clear(s);
+	
+	free(s->next->next->next->name);
+	free(s->next->next->next->surname);
+	free(s->next->next->next->lastname);
+	free(s->next->next->next);
+	free(s->next->next->name);
+	free(s->next->next->surname);
+	free(s->next->next->lastname);
+	free(s->next->next);
+	free(s->next->name);
+	free(s->next->surname);
+	free(s->next->lastname);
+	free(s->next);
+	free(s);
+
 }
 
 
@@ -767,13 +823,13 @@ TEST(ReadFromEmptyFile, FileToList_TEST)
 	s = FileToList(s, filename);
 	ASSERT_NE(s, nullptr);
 	EXPECT_EQ(s->next, nullptr);
-	s = Clear(s);
+	free(s);
 }
 
-
+/*
 int main(int argc, char ** argv)
 {
 	testing::InitGoogleTest(&argc, argv);
 	return RUN_ALL_TESTS();
 }
-
+*/
