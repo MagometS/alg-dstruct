@@ -69,18 +69,18 @@ void PrintList(list_people_t* p)
 }
 
 
-list_people_t* CreateNode(list_people_t* s, char* str)
+list_people_t* CreateNode(char* str)
 {
-	list_people_t* p = NULL;
-	s = (list_people_t*)malloc(sizeof(list_people_t));
-	if (s == NULL)
-	{
-		printf("error");
-		return NULL;
-	}
 	if (str == NULL)
 	{
 		printf("nothing to write");
+		return NULL;
+	}
+	list_people_t* p = NULL;
+	list_people_t* s = (list_people_t*)malloc(sizeof(list_people_t));
+	if (s == NULL)
+	{
+		printf("error");
 		return NULL;
 	}
 	char* word = strtok(str, " ,.");
@@ -166,14 +166,14 @@ int AddToList(list_people_t* s, list_people_t* newNode)
 }
 
 
-list_people_t* FileToList(list_people_t* s, char* filename)
+list_people_t* FileToList(char* filename)
 {
 	FILE* fp;
-	s = CreateList();
+	list_people_t* s = CreateList();
 	if (s == NULL)
 	{
 		printf("error");
-		return -1;
+		return NULL;
 	}
 	char buf[BUF_SIZE];
 	if ((fp = fopen(filename, "r")) == NULL)
@@ -190,7 +190,7 @@ list_people_t* FileToList(list_people_t* s, char* filename)
 
 			list_people_t* newplace = SearchPlace(s, buf);
 			list_people_t* newnode = NULL;
-			newnode = CreateNode(newnode, buf);
+			newnode = CreateNode(buf);
 			if (newnode == NULL)
 			{
 				printf("error");
@@ -198,16 +198,8 @@ list_people_t* FileToList(list_people_t* s, char* filename)
 				Clear(s);
 				return NULL;
 			}
-			int res = AddToList(newplace, newnode);
-			if (res < 0)
-			{
-				printf("error");
-				free(newnode);
-				fclose(fp);
-				Clear(s);
-
-				return NULL;
-			}
+			AddToList(newplace, newnode);
+			
 		}
 	}
 	fclose(fp);
@@ -271,8 +263,8 @@ list_people_t* FindPeople(list_people_t* s, char* str)
 					if (tmp->surname == NULL)
 					{
 						printf("error");
-						free(tmp);
 						free(tmp->name);
+						free(tmp);
 						Clear(founded);
 						return NULL;
 					}
@@ -282,9 +274,9 @@ list_people_t* FindPeople(list_people_t* s, char* str)
 					if (tmp->lastname == NULL)
 					{
 						printf("error");
-						free(tmp);
 						free(tmp->name);
 						free(tmp->surname);
+						free(tmp);
 						Clear(founded);
 						return NULL;
 					}
@@ -322,7 +314,7 @@ int main()
 	fclose(fp);
 
 	char* filename = "People.txt";
-	s = FileToList(s, filename);
+	s = FileToList(filename);
 	if (s == NULL)
 	{
 		printf("error");
