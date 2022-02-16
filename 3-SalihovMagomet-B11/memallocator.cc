@@ -12,7 +12,7 @@ struct descriptor
 typedef struct descriptor descriptor_t;
 
 descriptor_t* head = NULL;
-int fullSize = 0;
+int full_size = 0;
 
 int meminit(void* s, int size) 
 {
@@ -28,7 +28,7 @@ int meminit(void* s, int size)
 	head->prev = NULL;
 	head->is_free = 1;
 
-	fullSize = size;
+	full_size = size;
 
 	return 0;
 }
@@ -36,7 +36,6 @@ int meminit(void* s, int size)
 
 void memdone()
 {
-	head = NULL;
 	int size = 0;
 
 	if (head == NULL)
@@ -46,21 +45,22 @@ void memdone()
 
 	descriptor_t* block = head;
 
-	while (block != NULL) {
+	while (block != NULL) 
+	{
 		if (block->is_free == 1)
 		{
-			size += block->size;
+			size += block->size + sizeof(descriptor_t);
 		}
 
 		block = block->next;
 	}
 
-	size += sizeof(descriptor_t);
-
-	if (size < fullSize)
+	if (size < full_size)
 	{
 		fprintf(stderr, "Memory leak was detected");
+		return;
 	}
+	head = NULL;
 }
 
 
@@ -114,57 +114,51 @@ void memfree(void* p)
 	descriptor_t* buffer_block = free_block;
 	buffer_block->is_free = 1;
 
-	if (free_block->prev != NULL) 
+	if (free_block->prev != NULL && free_block->prev->is_free == 1)
 	{
-		if (free_block->prev->is_free == 1)
+		int new_size = 0;
+
+		if (free_block->next != NULL)
 		{
-			int new_size = 0;
-
-			if (free_block->next != NULL)
-			{
-				new_size = (char*)free_block->next - (char*)(free_block->prev + 1);
-			}
-			else
-			{
-				new_size = (char*)(head + 1) + fullSize - (char*)(free_block->prev + 1);
-			}
-
-			free_block->prev->next = free_block->next;
-
-
-			if (free_block->next != NULL)
-			{
-				free_block->next->prev = free_block->prev;
-			}
-
-			free_block->prev->size = new_size;
-			buffer_block = free_block->prev;
+			new_size = (char*)free_block->next - (char*)(free_block->prev + 1);
 		}
+		else
+		{
+			new_size = (char*)(head + 1) + full_size - (char*)(free_block->prev + 1);
+		}
+
+		free_block->prev->next = free_block->next;
+
+
+		if (free_block->next != NULL)
+		{
+			free_block->next->prev = free_block->prev;
+		}
+
+		free_block->prev->size = new_size;
+		buffer_block = free_block->prev;
 	}
 
-	if (buffer_block->next != NULL) 
+	if (buffer_block->next != NULL && buffer_block->next->is_free == 1)
 	{
-		if (buffer_block->next->is_free == 1) 
+		int new_size = 0;
+
+		if (buffer_block->next->next != NULL)
 		{
-			int new_size = 0;
-
-			if (buffer_block->next->next != NULL)
-			{
-				new_size = (char*)buffer_block->next->next - (char*)(buffer_block + 1);
-			}
-			else
-			{
-				new_size = (char*)(head + 1) + fullSize - (char*)(buffer_block + 1);
-			}
-
-			if (buffer_block->next->next != NULL)
-			{
-				buffer_block->next->next->prev = buffer_block;
-			}
-
-			buffer_block->next = buffer_block->next->next;
-			buffer_block->size = new_size;
+			new_size = (char*)buffer_block->next->next - (char*)(buffer_block + 1);
 		}
+		else
+		{
+			new_size = (char*)(head + 1) + full_size - (char*)(buffer_block + 1);
+		}
+
+		if (buffer_block->next->next != NULL)
+		{
+			buffer_block->next->next->prev = buffer_block;
+		}
+
+		buffer_block->next = buffer_block->next->next;
+		buffer_block->size = new_size;
 	}
 
 	if (buffer_block->next != NULL)
@@ -179,10 +173,10 @@ void memfree(void* p)
 	}
 	else
 	{
-		if (((char*)head + fullSize) != ((char*)(buffer_block + 1) + buffer_block->size))
+		if (((char*)head + full_size) != ((char*)(buffer_block + 1) + buffer_block->size))
 		{
 			void* leaked_ptr = (void*)((char*)(buffer_block + 1) + buffer_block->size);
-			int size = (char*)head + fullSize - (char*)leaked_ptr;
+			int size = (char*)head + full_size - (char*)leaked_ptr;
 
 			buffer_block->size += size;
 		}
