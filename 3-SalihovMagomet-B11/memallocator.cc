@@ -124,7 +124,7 @@ void memfree(void* p)
 		}
 		else
 		{
-			new_size = (char*)(head + 1) + full_size - (char*)(free_block->prev + 1);
+			new_size = (char*)head + full_size - (char*)(free_block->prev + 1);
 		}
 
 		free_block->prev->next = free_block->next;
@@ -149,7 +149,7 @@ void memfree(void* p)
 		}
 		else
 		{
-			new_size = (char*)(head + 1) + full_size - (char*)(buffer_block + 1);
+			new_size = (char*)head + full_size - (char*)(buffer_block + 1);
 		}
 
 		if (buffer_block->next->next != NULL)
