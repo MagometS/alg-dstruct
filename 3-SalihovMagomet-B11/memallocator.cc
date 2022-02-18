@@ -160,27 +160,6 @@ void memfree(void* p)
 		buffer_block->next = buffer_block->next->next;
 		buffer_block->size = new_size;
 	}
-
-	if (buffer_block->next != NULL)
-	{
-		if (((char*)(buffer_block + 1) + buffer_block->size) != (char*)buffer_block->next) 
-		{
-			void* leaked_ptr = (void*)((char*)(buffer_block + 1) + buffer_block->size);
-			int size = (char*)buffer_block->next - (char*)leaked_ptr;
-
-			buffer_block->size += size;
-		}
-	}
-	else
-	{
-		if (((char*)head + full_size) != ((char*)(buffer_block + 1) + buffer_block->size))
-		{
-			void* leaked_ptr = (void*)((char*)(buffer_block + 1) + buffer_block->size);
-			int size = (char*)head + full_size - (char*)leaked_ptr;
-
-			buffer_block->size += size;
-		}
-	}
 }
 
 
