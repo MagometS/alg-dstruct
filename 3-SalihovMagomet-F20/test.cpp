@@ -29,6 +29,7 @@ TEST(FunctionalTest, MinimumK_Even)
 	fclose(expected);
 }
 
+
 TEST(FunctionalTest, MinimumK_Odd) 
 {
 	FILE* input = fopen("input.txt", "r");
@@ -66,6 +67,25 @@ TEST(FunctionalTest, NotFound)
 	output = fopen("outputNotFound.txt", "r");
 	ASSERT_TRUE(output);
 	fseek(output, 0, SEEK_END);
+	i = ftell(output);
+	EXPECT_EQ(i, 0);
+	fclose(output);
+}
+
+
+TEST(EmptyFile, LabSolution_TEST)
+{
+	FILE* input = fopen("empty.txt", "r");
+	ASSERT_TRUE(input);
+	FILE* output = fopen("outputEmpty.txt", "w");
+	ASSERT_TRUE(output);
+	LabSolution(input, output, 6);
+	fclose(input);
+	fclose(output);
+	output = fopen("outputEmpty.txt", "r");
+	ASSERT_TRUE(output);
+	fseek(output, 0, SEEK_END);
+	int i = 0;
 	i = ftell(output);
 	EXPECT_EQ(i, 0);
 	fclose(output);
