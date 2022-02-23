@@ -1,5 +1,6 @@
 #include "labF.h"
 
+
 tree_t* CreateTree(int key) 
 {
 	tree_t* myTree = (tree_t*)malloc(sizeof(tree_t));
@@ -36,7 +37,7 @@ int AddElement(tree_t* myTree, int key)
 	}
 	if (key < myTree->key) 
 	{
-		if (!myTree->left) 
+		if (myTree->left == NULL)
 		{
 			myTree->left = CreateTree(key);
 			if (myTree->left)
@@ -56,7 +57,7 @@ int AddElement(tree_t* myTree, int key)
 	}
 	if (key > myTree->key) 
 	{
-		if (!myTree->right)
+		if (myTree->right == NULL)
 		{
 			myTree->right = CreateTree(key);
 			if (myTree->right) 
@@ -93,7 +94,7 @@ tree_t* MinimumK(tree_t* myTree, int k)
 	{
 		r = 1;
 	}
-	if (r != k) 
+	if (r != k)
 	{
 		if (r > k)
 		{
@@ -145,7 +146,7 @@ void PrintTree(tree_t* myTree)
 void PrintMinimumK(tree_t* myTree, int k, FILE* file) 
 {
 	tree_t* tmpTree = MinimumK(myTree, k);
-	if (tmpTree ==NULL)
+	if (tmpTree == NULL)
 	{
 		return;
 	}
