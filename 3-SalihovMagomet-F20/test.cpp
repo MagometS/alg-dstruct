@@ -79,7 +79,7 @@ TEST(EmptyFile, LabSolution_TEST)
 	ASSERT_TRUE(input);
 	FILE* output = fopen("outputEmpty.txt", "w");
 	ASSERT_TRUE(output);
-	LabSolution(input, output, 6);
+	LabSolution(input, output, 0);
 	fclose(input);
 	fclose(output);
 	output = fopen("outputEmpty.txt", "r");
