@@ -164,9 +164,13 @@ void PrintMinimumK(tree_t* myTree, int k, FILE* file)
 
 tree_t* ReadFile(FILE* file)
 {
-	int key;
+	int key = -1;
 	tree_t* myTree = NULL;
 	fscanf(file, "%i", &key);
+	if (key == -1)
+	{
+		return NULL;
+	}
 	myTree = CreateTree(key);
 	if (myTree == NULL)
 	{
