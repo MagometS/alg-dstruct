@@ -16,7 +16,8 @@ const int size = 524288;
 node* HashMap(void) 
 {
 	node* map = (node*)malloc(size * sizeof(node));
-	if (!map) {
+	if (!map) 
+	{
 		return NULL;
 	}
 	for (int i = 0; i < size; i++) 
