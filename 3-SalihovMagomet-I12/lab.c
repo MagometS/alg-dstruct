@@ -53,16 +53,19 @@ void FreeTree(bTree_t* tree)
 node_t* FindKey(const bTree_t* tree, const int key, int* id) 
 {
     node_t* foundNode = tree->root;
-    while (foundNode->isLeaf == 0) {
+    while (foundNode->isLeaf == 0) 
+    {
         *id = FindKeyInArr(foundNode->keys, foundNode->numKeys, key);
         if (*id != -1)
             return foundNode;
-        if (key >= foundNode->keys[foundNode->numKeys - 1]) {
+        if (key >= foundNode->keys[foundNode->numKeys - 1]) 
+        {
             foundNode = foundNode->children[foundNode->numKeys];
             continue;
         }
         for (int i = 0; i < foundNode->numKeys; ++i)
-            if (key < foundNode->keys[i]) {
+            if (key < foundNode->keys[i]) 
+            {
                 foundNode = foundNode->children[i];
                 break;
             }
@@ -143,8 +146,10 @@ int SplitNode(node_t* node, const int t, const int numSplit)
 int AddInNonfull(node_t* node, const int key, const int t) 
 {
     int i = node->numKeys - 1;
-    if (node->isLeaf != 0) {
-        while (i >= 0 && key < node->keys[i]) {
+    if (node->isLeaf != 0)
+    {
+        while (i >= 0 && key < node->keys[i]) 
+        {
             node->keys[i + 1] = node->keys[i];
             --i;
         }
@@ -155,7 +160,8 @@ int AddInNonfull(node_t* node, const int key, const int t)
     while (i >= 0 && key < node->keys[i])
         --i;
     ++i;
-    if (node->children[i]->numKeys == 2 * t - 1) {
+    if (node->children[i]->numKeys == 2 * t - 1) 
+    {
         if (SplitNode(node, t, i) == 0)
             return 0;
         if (key > node->keys[i])
@@ -273,7 +279,8 @@ void RemoveFromLeaf(node_t* node, const int key, const int t)
             else
                 LeftRotate(node, i);
         }
-        else {
+        else 
+        {
             node_t* lNeighbour = node->children[i - 1];
             if (child->numKeys + lNeighbour->numKeys < 2 * t - 1)
                 MergeChild(node, i - 1);
